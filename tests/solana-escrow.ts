@@ -114,7 +114,7 @@ describe("anchor-escrow", () => {
         SystemProgram.transfer({
           fromPubkey: provider.publicKey,
           toPubkey: account.publicKey,
-          lamports: 10 * LAMPORTS_PER_SOL,
+          lamports: 1 * LAMPORTS_PER_SOL,
         })
       ),
       ...[mintA, mintB].map((mint) =>
@@ -154,18 +154,6 @@ describe("anchor-escrow", () => {
       .then(confirm)
       .then(log);
   });
-
-  // Test: Refund (currently skipped with xit)
-  xit("Refund", async () => {
-    await program.methods
-      .refund()
-      .accounts({ ...accounts })
-      .signers([maker])
-      .rpc()
-      .then(confirm)
-      .then(log);
-  });
-
   // Test: Taker accepts the escrow offer
   it("Take", async () => {
     try {
@@ -181,5 +169,29 @@ describe("anchor-escrow", () => {
       throw(e)
     }
   });
+
+  // Test: Maker creates an escrow offer
+  it("Make", async () => {
+    await program.methods
+      .make(seed, new BN(1e6), new BN(1e6)) // Specify the seed and amounts
+      .accounts({ ...accounts })            // Provide all necessary accounts
+      .signers([maker])                     // Maker signs the transaction
+      .rpc()                                // Send the transaction
+      .then(confirm)
+      .then(log);
+  });
+
+  // Test: Refund (currently skipped with xit)
+  it("Refund", async () => {
+    await program.methods
+      .refund()
+      .accounts({ ...accounts })
+      .signers([maker])
+      .rpc()
+      .then(confirm)
+      .then(log);
+  });
+
+
 
 });
