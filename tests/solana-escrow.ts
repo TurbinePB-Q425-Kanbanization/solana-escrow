@@ -171,7 +171,7 @@ describe("anchor-escrow", () => {
   });
 
   // Test: Maker creates an escrow offer
-  it("Make", async () => {
+  it("Make again", async () => {
     await program.methods
       .make(seed, new BN(1e6), new BN(1e6)) // Specify the seed and amounts
       .accounts({ ...accounts })            // Provide all necessary accounts
@@ -181,7 +181,7 @@ describe("anchor-escrow", () => {
       .then(log);
   });
 
-  // Test: Refund (currently skipped with xit)
+  // Test: Refund to maker
   it("Refund", async () => {
     await program.methods
       .refund()
